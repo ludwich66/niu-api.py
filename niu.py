@@ -92,7 +92,7 @@ def post_info(path, sn, token):
 #    del data['items']
     return data
 
-if __name__ == "__main__":
+if __name__ == "__main__"
     token = get_token()
     sn = get_vehicles(token)
     data = get_info('/v3/motor_data/battery_info', sn, token)
@@ -121,16 +121,19 @@ if __name__ == "__main__":
     print ('is connected:  ', motorInfo['data']['isConnected'])
     print ('is charging:   ', motorInfo['data']['isCharging'])
     print ('is locked:     ', motorInfo['data']['lockStatus'])
+    
     print ('gsm signal:    ', motorInfo['data']['gsm'])
     print ('gps signal:    ', motorInfo['data']['gps'])
     print ('Time left:     ', motorInfo['data']['leftTime'])
     print ('centreCtrlBatt:', motorInfo['data']['centreCtrlBattery'])
     print ('Position lat:  ', motorInfo['data']['postion']['lat'])
     print ('Position lng:  ', motorInfo['data']['postion']['lng'])
-    print ('Last Track:  ')
-    print ('  Timestamp:   ', motorInfo['data']['lastTrack']['time'])
-    print ('  Distance:    ', motorInfo['data']['lastTrack']['distance'])
-    print ('  Riding Time: ', motorInfo['data']['lastTrack']['ridingTime'])
+    print ('HDOP:          ', motorInfo['data']['hdop'])
+    if (len(motorInfo['data']['lastTrack'])) != 0:
+           print ('Last Track:  ')
+           print ('  Timestamp:   ', motorInfo['data']['lastTrack']['time'])
+           print ('  Distance:    ', motorInfo['data']['lastTrack']['distance'])
+           print ('  Riding Time: ', motorInfo['data']['lastTrack']['ridingTime']
     """
     print (motorInfo)
     {'trace': '成功', 'status': 0, 'desc': '成功', 'data': {'ss_protocol_ver': 2,
