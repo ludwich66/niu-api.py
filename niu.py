@@ -10,6 +10,7 @@ from requests.exceptions import ConnectionError
 
 API_BASE_URL = 'https://app-api.niu.com'
 ACCOUNT_BASE_URL = 'https://account.niu.com'
+# Parameter als Umgebungsvariablen abfragen 
 NIU_EMAIL = os.environ['NIU_EMAIL']
 NIU_PASSWORD = os.environ['NIU_PASSWORD']
 NIU_COUNTRYCODE = os.environ['NIU_COUNTRYCODE']
@@ -88,7 +89,8 @@ def post_info(path, sn, token):
     if data['status'] != 0:
         print (data)
         return False
-#    data = data['data']['batteries']['compartmentA']
+
+    #    data = data['data']['batteries']['compartmentA']
 #    del data['items']
     return data
 
@@ -114,7 +116,6 @@ if __name__ == "__main__":
     print ('Battery Grade: ', batteryInfo['gradeBattery'])
 
     motorInfo = get_info('/v3/motor_data/index_info', sn, token)
-
     print ('Motor Info:')
     print ('exp. range:    ', motorInfo['data']['estimatedMileage'])
     print ('current speed: ', motorInfo['data']['nowSpeed'])
@@ -125,12 +126,16 @@ if __name__ == "__main__":
     print ('gps signal:    ', motorInfo['data']['gps'])
     print ('Time left:     ', motorInfo['data']['leftTime'])
     print ('centreCtrlBatt:', motorInfo['data']['centreCtrlBattery'])
+    # Qualität der GPS Daten
+    print ('HDOP:          ', motorInfo['data']['hdop'])
     print ('Position lat:  ', motorInfo['data']['postion']['lat'])
     print ('Position lng:  ', motorInfo['data']['postion']['lng'])
-    print ('Last Track:  ')
-    print ('  Timestamp:   ', motorInfo['data']['lastTrack']['time'])
-    print ('  Distance:    ', motorInfo['data']['lastTrack']['distance'])
-    print ('  Riding Time: ', motorInfo['data']['lastTrack']['ridingTime'])
+    if (len(motorInfo['data']['lastTrack'])) != 0:
+                print ('Last Track:  ')
+                print ('Timestamp:   ', motorInfo['data']['lastTrack']['time'])
+                print ('Distance:    ', motorInfo['data']['lastTrack']['distance'])
+                print ('Riding Time: ', motorInfo['data']['lastTrack']['ridingTime'])
+
     """
     print (motorInfo)
     {'trace': '成功', 'status': 0, 'desc': '成功', 'data': {'ss_protocol_ver': 2,
