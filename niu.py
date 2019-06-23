@@ -28,7 +28,6 @@ def get_token(email=NIU_EMAIL, password=NIU_PASSWORD, cc=NIU_COUNTRYCODE):
 
 
 def get_vehicles(token):
-
     url = API_BASE_URL + '/motoinfo/list'
     headers = {'token': token, 'Accept-Language': 'en-US'}
     try:
@@ -106,39 +105,89 @@ if __name__ == "__main__":
     'bmsId': 'BN1GPC2B40400386', 'batteryCharging': 49, 'gradeBattery': '99'}
     """
     print ('Battery Info:')
-    print ('BMS-Id:        ', batteryInfo['bmsId'])
+    # Nummer des Battarie-Management-Systems
+	print ('BMS-Id:        ', batteryInfo['bmsId'])
+	# Wird die Batterie geladen?
     print ('BatteryCharge: ', batteryInfo['batteryCharging'])
-    print ('Is connected:  ', batteryInfo['isConnected'])
+    # Ist die Batterie im Fahrzeug?
+	print ('Is connected:  ', batteryInfo['isConnected'])
+	# Anzahl der Ladezyklen
     print ('Times charged: ', batteryInfo['chargedTimes'])
-    print ('Temperature:   ', batteryInfo['temperature'])
+    # Temperatur 
+	print ('Temperature:   ', batteryInfo['temperature'])
+	# Alterungsindex der Batterie 0 == 80% der Nennleistung 
     print ('Battery Grade: ', batteryInfo['gradeBattery'])
 
     motorInfo = get_info('/v3/motor_data/index_info', sn, token)
-
     print ('Motor Info:')
+	# Geschätzte Reichweite
     print ('exp. range:    ', motorInfo['data']['estimatedMileage'])
-    print ('current speed: ', motorInfo['data']['nowSpeed'])
-    print ('is connected:  ', motorInfo['data']['isConnected'])
+    # Geschwindigkeit
+	print ('current speed: ', motorInfo['data']['nowSpeed'])
+    # Ist die Batterie im Fahrzeug?
+	print ('is connected:  ', motorInfo['data']['isConnected'])
+	# Fahrzeug wird geladen
     print ('is charging:   ', motorInfo['data']['isCharging'])
-    print ('is locked:     ', motorInfo['data']['lockStatus'])
-    print ('gsm signal:    ', motorInfo['data']['gsm'])
+    # Ist das Fahrzeug abgesperrt, 0 oder 1 nicht boolean
+	print ('is locked:     ', motorInfo['data']['lockStatus'])
+    # GSM Signal Wert 0-17, nichtlinear, Matching auf 0-5 wie in NIU App
+    if (motorInfo['data']['gsm']) == 0:
+        print ('GSM signal          :  0 Balken')
+	elif (motorInfo['data']['gsm']) == 1:
+        print ('GSM signal          :  1 Balken')
+    elif (motorInfo['data']['gsm']) == 2:
+        print ('GSM signal          :  2 Balken')
+	elif (motorInfo['data']['gsm']) == 3:
+        print ('GSM signal          :  3 Balken')
+    elif (motorInfo['data']['gsm']) == 4:
+        print ('GSM signal          :  4 Balken')
+    elif (motorInfo['data']['gsm']) == 5:
+        print ('GSM signal          :  5 Balken')
+    elif (motorInfo['data']['gsm']) == 6:
+        print ('GSM signal          :  5 Balken?')
+    elif (motorInfo['data']['gsm']) == 7:
+        print ('GSM signal          :  5 Balken?')
+    elif (motorInfo['data']['gsm']) == 8:
+        print ('GSM signal          :  5 Balken?')
+    elif (motorInfo['data']['gsm']) == 9:
+        print ('GSM signal          :  5 Balken?')
+    elif (motorInfo['data']['gsm']) == 10:
+        print ('GSM signal          :  5 Balken?')
+    elif (motorInfo['data']['gsm']) == 11:
+        print ('GSM signal          :  5 Balken')
+    elif (motorInfo['data']['gsm']) == 12:
+        print ('GSM signal          :  5 Balken')
+    elif (motorInfo['data']['gsm']) == 13:
+        print ('GSM signal          :  5 Balken')
+    elif (motorInfo['data']['gsm']) == 14:
+        print ('GSM signal          :  5 Balken')
+    elif (motorInfo['data']['gsm']) == 15:
+        print ('GSM signal          :  5 Balken')
+    elif (motorInfo['data']['gsm']) == 16:
+        print ('GSM signal          :  5 Balken')
+    elif (motorInfo['data']['gsm']) == 17:
+        print ('GSM signal          :  5 Balken')
+   	print ('gsm signal Raw:', motorInfo['data']['gsm'])
+   
+	# GPS Signal, Wert 0-5 
     print ('gps signal:    ', motorInfo['data']['gps'])
-    print ('Time left:     ', motorInfo['data']['leftTime'])
-    print ('centreCtrlBatt:', motorInfo['data']['centreCtrlBattery'])
+    #
+	print ('Time left:     ', motorInfo['data']['leftTime'])
+    # Ladestande des Pufferakku, 0-100%
+	print ('centreCtrlBatt:', motorInfo['data']['centreCtrlBattery'])
+	# GPS Breitengrad, xx,yyyyyy Dezimalgrad
     print ('Position lat:  ', motorInfo['data']['postion']['lat'])
-    print ('Position lng:  ', motorInfo['data']['postion']['lng'])
-    print ('HDOP:          ', motorInfo['data']['hdop'])
+	# GPS Längengrad, xx,yyyyyy Dezimalgrad
+	print ('Position lng:  ', motorInfo['data']['postion']['lng'])
+    # GPS HDOP Horizontal Dilution Of Precision, < 2,5 ist gut
+	print ('HDOP:          ', motorInfo['data']['hdop'])
     if (len(motorInfo['data']['lastTrack'])) != 0:
         print ('Last Track:  ')
         print ('  Timestamp:   ', motorInfo['data']['lastTrack']['time'])
         print ('  Distance:    ', motorInfo['data']['lastTrack']['distance'])
         print ('  Riding Time: ', motorInfo['data']['lastTrack']['ridingTime'])
-"""
-    print ('Last Track:  ')
-    print ('  Timestamp:   ', motorInfo['data']['lastTrack']['time'])
-    print ('  Distance:    ', motorInfo['data']['lastTrack']['distance'])
-    print ('  Riding Time: ', motorInfo['data']['lastTrack']['ridingTime'])
-    print (motorInfo)
+    
+	"""
     {'trace': '成功', 'status': 0, 'desc': '成功', 'data': {'ss_protocol_ver': 2,
     'nowSpeed': 0, 'isAccOn': '', 'isConnected': True, 'infoTimestamp':
     1561015942946, 'leftTime': '17.0', 'isCharging': 0, 'hdop': 0, 'gsm': 24,
@@ -153,8 +202,10 @@ if __name__ == "__main__":
 
     overallTally = post_info('/motoinfo/overallTally', sn, token)
     # print (overallTally)
-    print ('Total km:      ', overallTally['data']['totalMileage'])
-    print ('Total km since:', overallTally['data']['bindDaysCount'], 'days')
+    # Gesamtkilometer
+	print ('Total km:      ', overallTally['data']['totalMileage'])
+    # 
+	print ('Total km since:', overallTally['data']['bindDaysCount'], 'days')
 
     batteryHealth = get_info('/v3/motor_data/battery_info/health', sn, token)
     """
@@ -166,6 +217,7 @@ if __name__ == "__main__":
     'result': '-1'}], 'faults': [], 'isConnected': True, 'gradeBattery': '99',
     'bmsId': 'BN1GPC2B40400386'}}}, 'status': 0}
     """
-    print ('is double batt:', batteryHealth['data']['isDoubleBattery'])
+    # 
+	print ('is double batt:', batteryHealth['data']['isDoubleBattery'])
     # firmwareInfo = get_info('/motorota/getfirmwareversion', sn, token)
     # print (firmwareInfo)
